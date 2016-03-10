@@ -12,4 +12,4 @@
 	script.type = "text/javascript";
 	script.src = url+"?"+(new Date().getTime());
 	document.body.appendChild(script);
-})("//GreyMage.github.io/static/cmdnotify/script.js");
+})("//GreyMage.github.io/static/cmdnotify/script.min.js");
