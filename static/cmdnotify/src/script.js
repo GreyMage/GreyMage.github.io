@@ -64,17 +64,13 @@
 	if(inIframe()) { return; } 
 	
 	var insttag	= document.createElement("div");
-	
-	if(DEVLIST.indexOf(window.location.host) > -1){
-		insttag.classList.add("development");
-	} 
-	
-	// Prod wins ties.
 	if(PRODLIST.indexOf(window.location.host) > -1){
 		insttag.classList.add("production");
-	} 
-	
-	if(!insttag) { return; }
+	} else if(DEVLIST.indexOf(window.location.host) > -1){
+		insttag.classList.add("development");
+	} else {
+		return; // We shouldnt be here
+	}
 	
 	insttag.setAttribute("id","inst-tag");
 		
