@@ -21,7 +21,7 @@ gulp.task('css', function() {
   return gulp.src('style.less', { style: 'expanded' })
     .pipe(less())
     .pipe(autoprefixer('last 2 version'))
-		.pipe(cssnano())
+		.pipe(cssnano({zindex: false}))
 		.pipe(rename({suffix: '.min'}))
     .pipe(gulp.dest('.'))
 });
