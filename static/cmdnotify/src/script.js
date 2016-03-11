@@ -5,7 +5,7 @@
 	(function(){
 		var css = document.createElement("link");
 		css.rel = "stylesheet";
-		css.href = "//GreyMage.github.io/static/cmdnotify/dist/style.min.css";
+		css.href = "//GreyMage.github.io/static/cmdnotify/dist/style.min.css"+"?"+(new Date().getTime());
 		css.type = "text/css";
 		document.head.appendChild(css);
 	})();
