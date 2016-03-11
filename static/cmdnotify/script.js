@@ -1,6 +1,15 @@
 /* global Promise */
 (function(){ "use strict";
 	
+	// Load CSS
+	(function(){
+		var css = document.createElement("link");
+		css.rel = "stylesheet";
+		css.href = "//GreyMage.github.io/static/cmdnotify/style.min.css";
+		css.type = "text/css";
+		document.head.appendChild(css);
+	})();
+	
 	var PRODLIST = [
 		'partnersportal.jeld-wen.com',
 		'www.jeld-wen.com'
@@ -9,9 +18,7 @@
 		'jeld-wen-partners-portal',
 		'jeld-wen-com',
 	];
-	
-	var barHeight = 20;
-	
+		
 	var prex = document.getElementById("inst-tag");
 	if(prex) { prex.parentNode.removeChild(prex); }
 	
@@ -78,32 +85,7 @@
 	if(!insttag) { return; }
 	
 	insttag.setAttribute("id","inst-tag");
-	
-	//var inststyle = document.createElement("style");
-	
-	var style = {
-		position:'fixed',
-		top:'-'+barHeight+'px',
-		left:'0',
-		right:'0',
-		margin:'auto',
-		width:'200px',
-		height:barHeight+'px',
-		'font-family': 'Consolas',
-		'line-height': barHeight+'px',
-		'text-align':'center',
-		color:'white',
-		'z-index':100000,
-		'letter-spacing': '5px',
-		'font-weight': 'bold',
-		'font-size': '16px',
-		'border-radius': '0px 0px 100px 100px',
-	};
-	
-	for (var i in style) { if(style.hasOwnProperty(i)){
-		insttag.style[i] = style[i];
-	}}
-	
+		
 	fancyShow(insttag).then(function(){
 		
 		var factor = 3;
