@@ -29,22 +29,22 @@
 		
 		return new Promise(function(resolve){
 			var last = +new Date();
+			var sc = 0;
 			var tick = function() {
 				
-				var cur = parseFloat(el.style.top);			
-				cur = (cur + (new Date() - last) / 20);
-				el.style.top = cur + "px";			
+				sc = (sc + (new Date() - last) / 500);
+				el.style.transform = 'scaleY('+sc+')';	
 				
 				last = +new Date();
 				
-				if (cur < 0) {
+				if (sc < 1) {
 					if(window.requestAnimationFrame){
 						requestAnimationFrame(tick);
 					} else {
 						setTimeout(tick, 16);
 					}
 				} else {
-					el.style.top = 0;
+					el.style.transform = 'scaleY(1)';
 					resolve();
 				}
 			};
@@ -83,7 +83,8 @@
 	
 	var style = {
 		position:'fixed',
-		top:'-'+barHeight+'px',
+		top:'0px',
+		'transform': 'scaleY(0)',
 		left:'0',
 		right:'0',
 		margin:'auto',
@@ -98,6 +99,7 @@
 		'font-weight': 'bold',
 		'font-size': '16px',
 		'border-radius': '0px 0px 100px 100px',
+		'transform-origin': 'top',
 	};
 	
 	for (var i in style) { if(style.hasOwnProperty(i)){
@@ -111,10 +113,10 @@
 		document.body.addEventListener("mousemove",function(e){
 			var tol = (insttag.clientHeight * factor);
 			if(e.clientY <= tol){
-				var newY = Math.min(0,-1*(tol - e.clientY));
-				insttag.style.top = (newY/factor)+"px";
+				var str = e.clientY / tol;
+				insttag.style.transform = 'scaleY('+str+')';
 			} else {
-				if(insttag.style.top !== "0px") { insttag.style.top = "0px"; }
+				if(insttag.style.transform !== 'scaleY(1)') { insttag.style.transform = 'scaleY(1)'; }
 			}
 		});
 		
@@ -122,7 +124,7 @@
 			e = e ? e : window.event;
 			var from = e.relatedTarget || e.toElement;
 			if (!from || from.nodeName === "HTML") {
-				insttag.style.top = "0px";
+				insttag.style.transform = 'scaleY(1)';
 			}
 		});
 		
