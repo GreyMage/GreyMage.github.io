@@ -63,23 +63,15 @@
 	
 	if(inIframe()) { return; } 
 	
-	var PROD = document.createElement("div");
-	PROD.innerHTML = "PRODUCTION";
-	PROD.style.background = "red";
-	
-	var DEV = document.createElement("div");
-	DEV.innerHTML = "DEVELOPMENT";
-	DEV.style.background = "green";
-	
-	var insttag	= null;
+	var insttag	= document.createElement("div");
 	
 	if(DEVLIST.indexOf(window.location.host) > -1){
-		insttag = DEV;
+		insttag.classList.add("development");
 	} 
 	
 	// Prod wins ties.
 	if(PRODLIST.indexOf(window.location.host) > -1){
-		insttag = PROD;
+		insttag.classList.add("production");
 	} 
 	
 	if(!insttag) { return; }

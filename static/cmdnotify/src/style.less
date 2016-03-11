@@ -17,4 +17,19 @@
 	font-weight:bold;
 	font-size: 16px;
 	border-radius:0px 0px 100px 100px;
+	
+	.development {
+		background:green;
+		&:after{
+			display:"inline";
+			content:"DEVELOPMENT";
+		}
+	}
+	.production {
+		background:red;
+		&:after{
+			display:"inline";
+			content:"PRODUCTION";
+		}
+	}
 }
