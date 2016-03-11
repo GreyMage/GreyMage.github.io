@@ -17,6 +17,7 @@
 	var DEVLIST = [
 		'jeld-wen-partners-portal',
 		'jeld-wen-com',
+		'jw-clt-jira-form',
 	];
 		
 	var prex = document.getElementById("inst-tag");
