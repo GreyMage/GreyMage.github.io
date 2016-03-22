@@ -83,9 +83,12 @@
 			if(typeof(nick != "undefined"))	var msgwrap = $("<div/>").appendTo(to).addClass("msg-" + nick);
 			var newmsg = $("<div/>");
 
-			if (IGNORELIST.indexOf(nick) != -1 || (IGNORE_GHOST_MESSAGES && isGhost)) {
-				// Don't add the message if we're ignoring the sender or it's a ghost on a reconnect
+			if(IGNORE_GHOST_MESSAGES && isGhost){
 				return;
+			}
+			
+			if (IGNORELIST.indexOf(nick) != -1) {
+				newmsg.style.fontSize = "5px";
 			}
 			
 			msgwrap.addClass($("#chatlist ."+nick).attr("class"));
