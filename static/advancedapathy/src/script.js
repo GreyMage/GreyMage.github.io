@@ -255,5 +255,6 @@
 	}
 	
 	ready(main);
-    
+    window.apathy = apathy;
+	
 })();
