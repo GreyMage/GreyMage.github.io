@@ -75,7 +75,7 @@
 		whenExists(_to, function(to) {
 
 			// New format cause fuck all that argument shit. know whats cool? Objects.
-			var nick = "Apa.. "+data.msg.nick;
+			var nick = data.msg.nick;
 			var msgText = data.msg.msg; // Don't hate me.
 			var metadata = data.msg.metadata;
 			var isGhost = data.ghost;
@@ -83,8 +83,7 @@
 			if(typeof(nick != "undefined"))	var msgwrap = $("<div/>").appendTo(to).addClass("msg-" + nick);
 			var newmsg = $("<div/>");
 
-			if (IGNORELIST.indexOf(nick) != -1 ||
-				(IGNORE_GHOST_MESSAGES && isGhost)) {
+			if (IGNORELIST.indexOf(nick) != -1 || (IGNORE_GHOST_MESSAGES && isGhost)) {
 				// Don't add the message if we're ignoring the sender or it's a ghost on a reconnect
 				return;
 			}
