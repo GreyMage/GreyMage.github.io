@@ -1,17 +1,18 @@
 {
   "name": "GenBuild",
   "version": "1.0.0",
-  "description": "",
-  "main": "build.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
+  "namespace": "cades",
+  "scriptname": "Advanced Apathy",
+  "uriprefix" : "//GreyMage.github.io/static",
+  "main": "script.js",
+  "include": [
+    "http://berrytube.tv/",
+    "http://www.berrytube.tv/"
+  ],
+  "dependencies": {
     "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^3.1.0",
     "gulp-cssnano": "^2.1.1",
+    "gulp-autoprefixer": "^3.1.0",
     "gulp-imagemin": "^2.4.0",
     "gulp-jshint": "^2.0.0",
     "gulp-less": "^3.0.5",
@@ -19,5 +20,12 @@
     "gulp-uglify": "^1.5.3",
     "gulp-watch": "^4.3.5",
     "jshint": "^2.9.1"
-  }
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
