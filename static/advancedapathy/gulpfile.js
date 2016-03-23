@@ -6,50 +6,64 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     rename = require('gulp-rename'),
     watch = require('gulp-watch'),
+	header = require('gulp-header'),
     imagemin = require('gulp-imagemin');	
 	
 var fs = require('fs');
 var path = require('path');
+var pkg = require('./package.json');
+var fileBanner = [ '/**',
+	'Last Build: <%= now %>',
+'*/\n'].join("\n");
 
 gulp.task('userscript',function(done){
 	
 	function getHeaders(pkg){
-		var headers = {
-			name:pkg.scriptname,
-			namespace:pkg.namespace,
-			include:pkg.include,
-			version:pkg.version,
-			grant:pkg.grant || "none",
-		}
+		
+		var headers = pkg.headers;
+		
+		//Auto padder
+		var pad = (function(headers){
+			var maxlen = 0;
+			for(var x in headers){
+				if(x.length > maxlen){
+					maxlen = x.length;
+				}
+			}
+			return function(x){
+				while(x.length < maxlen + 1){
+					x += " ";
+				}
+				return x;
+			}
+		})(headers);
 		
 		var headerblock = [];
 		headerblock.push('// ==UserScript==');
 		for(var header in headers){
 			if(Array.isArray(headers[header])){
 				headers[header].forEach(function(sub){
-					headerblock.push('// @'+header+" "+sub);
+					headerblock.push('// @'+pad(header)+" "+sub);
 				});
 				continue;
 			}
-			headerblock.push('// @'+header+" "+headers[header]);
+			headerblock.push('// @'+pad(header)+" "+headers[header]);
 		}
 		headerblock.push('// ==/UserScript==');
 		return headerblock.join("\n");
 	}
 	
 	function getBootloader(pkg){
-		return '(function(url){ var script = document.createElement("script"); script.type = "text/javascript"; script.src = url+"?"+(new Date().getTime()); document.body.appendChild(script); })("'+pkg.uriprefix+'/'+path.basename(__dirname)+'/dist/script.min.js");';
+		return '(function(url){ var script = document.createElement("script"); script.type = "text/javascript"; script.src = url+"?"+(new Date().getTime()); document.body.appendChild(script); })("'+pkg.uriprefix+'/'+path.basename(__dirname)+'/dist/'+pkg.main+'");';
 	}
 	
 	fs.readFile('./package.json',function(err,data){
-		var pkg = JSON.parse(data);
-		var content = [getHeaders(pkg),getBootloader(pkg)].join("\n\n");
+		var fresh_pkg = JSON.parse(data).userscript;
+		var content = [getHeaders(fresh_pkg),getBootloader(fresh_pkg)].join("\n\n");
 		fs.writeFile('dist/script.user.js', content, function(err){
 			done();
 		});
 	})
-	
-	
 
 })
 	
@@ -57,7 +71,9 @@ gulp.task('js', function() {
 	return gulp.src('src/**/*.js', { style: 'expanded' })
 		.pipe(jshint('.jshintrc'))
 		.pipe(jshint.reporter('default'))
+		.pipe(gulp.dest('dist'))
 		.pipe(uglify())
+		.pipe(header(fileBanner, { pkg : pkg, now: (new Date()+"") } ))
 		.pipe(rename({suffix: '.min'}))
 		.pipe(gulp.dest('dist'))
 });
@@ -68,7 +84,9 @@ gulp.task('css', ['css:less','css:css']);
 gulp.task('css:css', function() {
 	return gulp.src('src/**/*.css', { style: 'expanded' })
 		.pipe(autoprefixer('last 2 version'))
-		.pipe(cssnano({zindex: false}))
+		.pipe(gulp.dest('dist'))
+		.pipe(cssnano({zindex: false})) 
+		.pipe(header(fileBanner, { pkg : pkg, now: (new Date()+"") } ))
 		.pipe(rename({suffix: '.min'}))
 		.pipe(gulp.dest('dist'))
 });
@@ -77,7 +95,9 @@ gulp.task('css:less', function() {
 	return gulp.src('src/**/*.less', { style: 'expanded' })
 		.pipe(less())
 		.pipe(autoprefixer('last 2 version'))
+		.pipe(gulp.dest('dist'))
 		.pipe(cssnano({zindex: false}))
+		.pipe(header(fileBanner, { pkg : pkg, now: (new Date()+"") } ))
 		.pipe(rename({suffix: '.min'}))
 		.pipe(gulp.dest('dist'))
 });

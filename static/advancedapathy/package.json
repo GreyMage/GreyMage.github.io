@@ -1,18 +1,25 @@
 {
   "name": "GenBuild",
   "version": "1.0.0",
-  "namespace": "cades",
-  "scriptname": "Advanced Apathy",
-  "uriprefix" : "//GreyMage.github.io/static",
-  "main": "script.js",
-  "include": [
-    "http://berrytube.tv/",
-    "http://www.berrytube.tv/"
-  ],
+  "userscript": {
+    "main": "script.min.js",
+    "uriprefix": "//GreyMage.github.io/static",
+    "headers": {
+      "name": "Advanced Apathy",
+      "namespace": "cades",
+      "include": [
+        "http://berrytube.tv/",
+        "http://www.berrytube.tv/"
+      ],
+      "version": "1.0",
+      "grant": "none"
+    }
+  },
   "dependencies": {
     "gulp": "^3.9.1",
-    "gulp-cssnano": "^2.1.1",
     "gulp-autoprefixer": "^3.1.0",
+    "gulp-cssnano": "^2.1.1",
+    "gulp-header": "^1.7.1",
     "gulp-imagemin": "^2.4.0",
     "gulp-jshint": "^2.0.0",
     "gulp-less": "^3.0.5",
@@ -25,7 +32,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Eric Cutler",
   "license": "ISC",
-  "description": ""
+  "main": "gulpfile.js",
+  "description": "Generic Builder for Node projects, and Userscripts."
 }
