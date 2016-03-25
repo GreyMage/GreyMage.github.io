@@ -19,6 +19,7 @@
 		'jeld-wen-com',
 		'jw-clt-jira-form',
 		'jeld-wen-com-dev-ids-replacement.developmentcmd.com',
+		'jeld-wen-com-qa-ids-replacement.developmentcmd.com',
 	];
 		
 	var prex = document.getElementById("inst-tag");
