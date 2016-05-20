@@ -58,17 +58,11 @@
 		
 		el.charlimit.init = function(){
 			el.charlimit.updateLabels();
+			el.setAttribute('maxlength',el.charlimit.max()); // This will work for most things.
 			addEventListener(el,"keypress change input",el.charlimit.update);
 		};
 		
 		el.charlimit.update = function(e){
-			el.charlimit.oldvalue = el.charlimit.oldvalue || "";
-			if(!el.charlimit.valid()){
-				e.preventDefault();
-				el.value = el.charlimit.oldvalue;
-			} else {
-				el.charlimit.oldvalue = el.value
-			}
 			el.charlimit.updateLabels();
 		}
 		
