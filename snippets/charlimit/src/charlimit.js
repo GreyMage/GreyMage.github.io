@@ -1,6 +1,7 @@
-// Attach "Character Left" indicators
-(function(){
+;(function(){
+	"use strict";
 	
+	// Attach "Character Left" indicators
 	var ready = ready || function(fn) {
 		if (document.readyState != 'loading'){
 			fn();
@@ -12,10 +13,10 @@
 				fn();
 			});
 		}
-	}
+	};
 	
 	// Using a special variant to allow multiple events at once.
-	function addEventListener(el, eventName, handler) {
+	var addEventListener = function(el, eventName, handler) {
 		eventName.split(" ").forEach(function(eventName){
 			if (el.addEventListener) {
 				el.addEventListener(eventName, handler);
@@ -25,7 +26,7 @@
 				});
 			}
 		});
-	}
+	};
 	
 	var addClass = addClass || function(el,className){
 		if (el.classList)
@@ -39,9 +40,9 @@
 			el.classList.remove(className);
 		else
 			el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
-	}
+	};
 	
-	function checkForCharlimit(el){
+	var checkForCharlimit = function(el){
 		
 		var amtAttr = 'data-charlimit-amount';
 		var addAttr = 'data-charlimit-value';
@@ -54,7 +55,7 @@
 		
 		el.charlimit.max = function(){
 			return parseInt(el.getAttribute(amtAttr),10);
-		}
+		};
 		
 		el.charlimit.init = function(){
 			el.charlimit.updateLabels();
@@ -64,7 +65,7 @@
 		
 		el.charlimit.update = function(e){
 			el.charlimit.updateLabels();
-		}
+		};
 		
 		// Gets all labels every time. slightly less efficient than saving them, but allows for
 		// delegate-like behavior in that newly added elements need no special introduction.
@@ -76,12 +77,12 @@
 				}
 			}
 			return set;
-		}
+		};
 		
 		el.charlimit.valid = function(){
 			if(el.value.length > el.charlimit.max()) return false;
 			return true;
-		}
+		};
 		
 		el.charlimit.updateLabels = function(){
 			el.charlimit.getLabels().forEach(function(label){
@@ -90,10 +91,10 @@
 				label.innerHTML = left;
 				label.setAttribute("data-charlimit-used-ratio",ratio);
 			});
-		}
+		};
 		
 		el.charlimit.init();
-	}
+	};
 	
 	ready(function(){
 		for(var i=0, list = document.getElementsByTagName("*") ; i < list.length; i++){
