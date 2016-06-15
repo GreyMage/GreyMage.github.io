@@ -1,5 +1,6 @@
 /*global IGNORELIST*/
 /*global socket*/
+/*global btEvents*/
 (function(){
 	'use strict';
 
@@ -77,6 +78,11 @@
 				apathy.loopCheck();
 			},2000);
 		});
+		
+		btEvents.on("chat",function(data){
+			console.log("apathy",data);
+		});  
+		
 	}
 	
 	ready(main);
