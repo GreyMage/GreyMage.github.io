@@ -1,0 +1,1 @@
+/* fancytext ; Author: Eric Cutler ; Built On: 2016-06-06 14:34:22 */!function(){"use strict";var t=t||function(t){"loading"!=document.readyState?t():document.addEventListener?document.addEventListener("DOMContentLoaded",t):document.attachEvent("onreadystatechange",function(){"loading"!=document.readyState&&t()})};t(function(){})}();
