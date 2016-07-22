@@ -3,6 +3,7 @@ const dom = document.createElement('canvas');
 const ctx = dom.getContext("2d");
 const actors = [];
 
+let tickCycle = true;
 
 const main = ()=>{
 	// Resize handler.
@@ -20,10 +21,18 @@ const main = ()=>{
 	
 }
 
+const sleep = () => {
+	tickCycle = false;
+}
+
+const wake = () => {
+	tickCycle = true;
+}
+
 const click = e => {
 	actors.forEach(actor => {
-		if(actor.onClick) actor.onClick(ctx,e);
-	})
+		if(isClicked(e,actor)) actor.emit("click",e);
+	});
 }
 
 const resize = e=>{
@@ -31,17 +40,25 @@ const resize = e=>{
 	dom.height = window.innerHeight;
 }
 
+const isClicked = (e,actor) =>{
+	let hb = actor.hitbox;
+	if(e.clientY >= hb.y && e.clientY <= hb.y+hb.h && e.clientX >= hb.x && e.clientX <= hb.x+hb.w){
+		return true;
+	}
+	return false;
+}
+
 const addActor = actor => {
 	if(actors.indexOf(actor) === -1){
 		actors.push(actor);
-		if(actor.onSpawn) actor.onSpawn(ctx,canvas);
+		actor.spawn(ctx,canvas);
 	}
 }
 
 const rmActor = actor => {
 	let i = actors.indexOf(actor);
 	if(i !== -1){
-		if(actor.onDestroy) actor.onDestroy(ctx);
+		actor.destroy();
 		actors.splice(i,1);
 	}
 }
@@ -50,8 +67,14 @@ let lastTime = 0;
 let shade = false;
 const tick = time =>{
 	
+	// Put next frame online.
+	requestAnimationFrame(tick);
+	
+	//skip maybe
+	if(!tickCycle) { return; }
+	
 	// compute delta
-	let delta = (time - lastTime) / 1000;
+	let delta = ((time - lastTime) / 1000) || 0;
 	// save stamp
 	lastTime = time;
 	
@@ -63,17 +86,17 @@ const tick = time =>{
 	}
 	
 	actors.forEach(actor => {
-		if(actor.onTick) actor.onTick(ctx,delta,time);
+		actor.tick(delta,time);
 	})
-	
-	// Loop
-	requestAnimationFrame(tick);
 	
 }
 
 // attach helper methods
 canvas.addActor = addActor;
 canvas.rmActor = rmActor;
+canvas.sleep = sleep;
+canvas.wake = wake;
+
 canvas.toggleShade = () => {
 	shade = !shade;
 }

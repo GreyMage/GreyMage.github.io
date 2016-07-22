@@ -27,7 +27,9 @@ module.exports = {
 			{
 				test: /\.less$/,
 				loader: "style!css!less"
-			}
+			},
+			// Sprites
+			{ test: /\.png$/, loader: "url-loader" },
         ]
     }
 };
