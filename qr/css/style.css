@@ -1,0 +1,44 @@
+@import 'https://fonts.googleapis.com/css?family=Shadows+Into+Light';
+@import 'https://fonts.googleapis.com/css?family=Josefin+Sans';
+
+#mainwrap {
+	display: table;
+    margin: 0 auto;
+	margin-bottom: 50px;
+	font-family: 'Josefin Sans', sans-serif;
+}
+
+#main {
+	font-size: 1.1em;
+}
+
+#qrwrap {
+    font-family: 'Shadows Into Light', cursive;
+    text-align: center;
+    border: 1px dashed #ccc;
+    margin: 0 auto;
+    height: 2in;
+    width: 2in;
+}
+
+#printtitle {
+    margin: 0;
+    font-size: 2em;
+}
+
+#title {
+    font-weight: bold;
+    text-align: center;
+    display: block;
+	font-size: 2em;
+	margin-top: 20px;
+}
+
+#qr {
+    margin: 0 auto;
+    display: table;
+}
+
+ul {
+    padding: 0;
+}
