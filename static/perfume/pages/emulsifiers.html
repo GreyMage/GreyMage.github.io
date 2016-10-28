@@ -1,3 +1,3 @@
-<select>
-	<option ng-repeat="e in emulsifiers">{{e.name}}</option>
+<select ng-model="emulsifier">
+	<option ng-repeat="e in emulsifiers" ng-value="e.hlb">{{e.name}} ( {{e.hlb}} Required HLB)</option>
 </select>
