@@ -40,8 +40,8 @@
   function loadUserSubs(username,more=0){
     return new Promise((resolve,reject)=>{
 
-      // First of all, since we're trying to not get API banned, lets cache this data for... i dunno, a month?
-      const cacheTime = 1000 * 60 * 60 * 24 * 30;
+      // First of all, since we're trying to not get API banned, lets cache this data for... i dunno, a day? right now we're only checking the last 50 posts, may extend later.
+      const cacheTime = 1000 * 60 * 60 * 24;
       const prefix = "AUTHOR_SUBS_";
 
       // Check localStorage
