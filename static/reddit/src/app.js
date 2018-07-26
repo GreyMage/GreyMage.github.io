@@ -62,9 +62,9 @@ class Main extends React.Component {
                 
                 fetch.catch((e)=>{
                     // Try again. (this will re-queue)
-                    console.log("Failed to fetch",path,"Trying again");
-                    this.loadAbout();
                     done();
+                    console.log("Failed to fetch",path,"Trying again to get about");
+                    this.loadAbout();
                 });
                 
             })
@@ -106,9 +106,9 @@ class Main extends React.Component {
                 
                 fetch.catch((e)=>{
                     // Try again. (this will re-queue)
-                    console.log("Failed to fetch",url,"Trying again");
-                    getPage(after);
                     done();
+                    console.log("Failed to fetch",url,"Trying again, no json",after);
+                    getPage(after);
                 });
             })
             
