@@ -64,6 +64,7 @@ class Main extends React.Component {
                     // Try again. (this will re-queue)
                     console.log("Failed to fetch",path,"Trying again");
                     this.loadAbout();
+                    done();
                 });
                 
             })
@@ -107,6 +108,7 @@ class Main extends React.Component {
                     // Try again. (this will re-queue)
                     console.log("Failed to fetch",url,"Trying again");
                     getPage(json.data.after);
+                    done();
                 });
             })
             
