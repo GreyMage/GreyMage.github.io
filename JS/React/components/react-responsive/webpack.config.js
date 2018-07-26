@@ -18,10 +18,8 @@ var config = {
 				loader : 'babel-loader'
 			}
 		]
-	},
-	plugins: [
-		// new webpack.optimize.UglifyJsPlugin({minimize: true})
-	]
+	}
+	
 };
 
 module.exports = config;

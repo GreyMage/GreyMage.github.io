@@ -1,24 +1,22 @@
 import React from 'react';
 import {render} from 'react-dom';
 
+import SummaryTable from './lib/SummaryTable';
+
 class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {date: new Date()};
 	}
 	getTables() {
-		
 		if(!this.props.licenses){
 			return <div>No Licenses!</div>;
 		}
-		
 		let tables = [];
 		for(let i=0;i<this.props.licenses.length;i++){
-			console.log(this.props.licenses[i]);
-			tables.push(<div key={i}>{this.props.licenses[i].fields.JWUID__c}</div>);
+			tables.push(<SummaryTable key={i} license={this.props.licenses[i]} team={this.props.team}></SummaryTable>);
 		}
 		return <div>{tables}</div>;
-
 	}
 	render () {
 		return <div>			
