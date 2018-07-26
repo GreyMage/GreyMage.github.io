@@ -50,14 +50,19 @@ class Main extends React.Component {
             this.queue.add(done => {
                 const path = "/user/"+this.props.author+"/about.json";
                 // console.log("trying to get json",path);
-                GetJson(path).then(({data}) => {
+                const fetch = GetJson(path);
+                
+                fetch.then(({data}) => {
                     this.db.about.update({name:data.name},data,{upsert:true},(err,numReplaced)=>{
                         this.setState({about:data});
                         done();
                     })
                     // console.log(data);
-                }).catch((e)=>{
+                })
+                
+                fetch.catch((e)=>{
                     // Try again. (this will re-queue)
+                    console.log("Failed to fetch",path,"Trying again");
                     this.loadAbout();
                 });
                 
@@ -81,7 +86,9 @@ class Main extends React.Component {
             if(after) url += "?after="+after;
 
             this.queue.add(done => {
-                GetJson(url).then(json => {
+                const fetch = GetJson(url)
+                
+                fetch.then(json => {
                     const posts = json.data.children;
                     if(posts.length > 0){
                         posts.forEach(post => {
@@ -94,8 +101,11 @@ class Main extends React.Component {
                         getPage(json.data.after);
                     }
                     else finish(done);
-                }).catch((e)=>{
+                })
+                
+                fetch.catch((e)=>{
                     // Try again. (this will re-queue)
+                    console.log("Failed to fetch",url,"Trying again");
                     getPage(json.data.after);
                 });
             })
