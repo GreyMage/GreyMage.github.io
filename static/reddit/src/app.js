@@ -56,6 +56,9 @@ class Main extends React.Component {
                         done();
                     })
                     // console.log(data);
+                }).catch((e)=>{
+                    // Try again. (this will re-queue)
+                    this.loadAbout();
                 });
                 
             })
@@ -91,6 +94,9 @@ class Main extends React.Component {
                         getPage(json.data.after);
                     }
                     else finish(done);
+                }).catch((e)=>{
+                    // Try again. (this will re-queue)
+                    getPage(json.data.after);
                 });
             })
             
