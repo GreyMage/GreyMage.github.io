@@ -190,6 +190,8 @@ class Main extends React.Component {
         
         let hate = [
             'The_Donald',
+            'CringeAnarchy',
+            'GamersRiseUp',
         ];
         let user_hates = [];
         hate.forEach(ha => {
