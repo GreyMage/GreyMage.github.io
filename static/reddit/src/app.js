@@ -13,7 +13,7 @@ class Main extends React.Component {
     constructor(props) {
         super(props);
         this.queue = new Queue();
-        this.state = {}
+        this.state = { iconSize: 20 }
         
         this.loadAbout = this.loadAbout.bind(this);
         this.loadSubs = this.loadSubs.bind(this);
@@ -160,7 +160,11 @@ class Main extends React.Component {
     
     getAccountAge(){
         if(!this.state.about) return <span>Loading</span>;
-        return <span>Account Age: {this.calculateAge(this.state.about.created).human}</span>
+        const style = {
+            lineHeight:this.state.iconSize+"px",
+            paddingLeft:(this.state.iconSize+10)+"px"
+        };
+        return <span style={style}>Account Age: {this.calculateAge(this.state.about.created).human}</span>
     }
     
     getAccountHate(){
@@ -182,20 +186,18 @@ class Main extends React.Component {
     }
     
     getIdenticon(){
-        // console.log(Identicon);
+        if(!this.state.about) return <span></span>;
         
         let hash = crypto.createHash('sha1').update(this.props.author).digest('hex');
         var svg = new Identicon(hash, {
-            margin: 0.2,                              // 20% margin
-            size: 42,                                // 420px square
-            format: 'svg'                             // use SVG instead of PNG
+            margin: 0,
+            size: this.state.iconSize,
+            format: 'svg'
         }).toString();
         
         const src = "data:image/svg+xml;base64,"+svg;
         
-        return <div>
-            <img src={src} />
-        </div>
+        return <img style={{position: "absolute"}} src={src} />
     }
     
     
@@ -207,9 +209,8 @@ class Main extends React.Component {
     
     getContent(){
         return <div>
-            <div>{this.getAccountAge()}</div>
+            <div style={{position:'relative',display: "inline-block"}}>{this.getIdenticon()} {this.getAccountAge()}</div>
             <div>{this.getAccountHate()}</div>
-            <div>{this.getIdenticon()}</div>
         </div>
     }
     
