@@ -107,7 +107,7 @@ class Main extends React.Component {
                 fetch.catch((e)=>{
                     // Try again. (this will re-queue)
                     console.log("Failed to fetch",url,"Trying again");
-                    getPage(json.data.after);
+                    getPage(after);
                     done();
                 });
             })
