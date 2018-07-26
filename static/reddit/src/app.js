@@ -243,7 +243,7 @@ class Main extends React.Component {
 // and being attached to only adds the comment to the processing queue.
 if(window.gm_sanity_heartbeat) clearInterval(gm_sanity_heartbeat);
 window.gm_sanity_heartbeat = setInterval(()=>{
-    let comments = document.querySelectorAll("[data-type=comment]");
+    let comments = document.querySelectorAll("[data-type=comment],[data-type=link]");
     comments = Array.prototype.slice.call(comments);
     comments.forEach(comment => {
         if(comment.gm_sanity) {
