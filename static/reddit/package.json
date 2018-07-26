@@ -1,0 +1,33 @@
+{
+  "name": "reddit_sanity",
+  "version": "1.0.0",
+  "description": "This is how i wont go mad",
+  "main": "server.js",
+  "author": "Cades <bulzeeb@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "dev": "npm run watch",
+    "postinstall": "npm run build"
+  },
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "dotenv": "^5.0.1",
+    "file-loader": "^1.1.11",
+    "identicon.js": "^2.3.2",
+    "less": "^3.0.1",
+    "less-loader": "^4.1.0",
+    "nedb": "^1.8.0",
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1",
+    "webpack": "^3.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.3"
+  }
+}
