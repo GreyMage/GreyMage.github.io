@@ -164,25 +164,68 @@ class Main extends React.Component {
         // Work out human description
         if(age.years > 1){
             age.human = `around ${Math.floor(age.years)} years.`;
+            age.robot = {unit:"Year",num: Math.floor(age.years)}
         } else if(age.months > 1) {
             age.human = `around ${Math.floor(age.months)} months.`;
+            age.robot = {unit:"Month",num: Math.floor(age.months)}
         } else if(age.days > 1) {
             age.human = `only ${Math.floor(age.days)} days.`;
+            age.robot = {unit:"Day",num: Math.floor(age.days)}
         } else {
             age.human = `TODAY! Only ${Math.floor(age.minutes)} Minutes!`;
+            age.robot = {unit:"Minute",num: Math.floor(age.minutes)}
         }
 
         return age;
 
     }
     
+    getAgeHUD(){
+        const age = this.calculateAge(this.state.about.created);
+        // console.log(age);
+        
+        const wrapStyle = {
+            display:'inline-flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            height: '20px',
+        }
+        const blockStyle = {
+            height: "10px",
+            width: "10px",
+            margin: "1px",
+            display: 'inline-block',
+        }
+        
+        const blocks = [];
+        Array.from(Array(age.robot.num),(_,i)=>{
+            
+            const map = {
+                "Year": "#558b2f",
+                "Month": "#ff8f00",
+                "Day": "#c62828",
+                "Minute": "#4e342e",
+            }
+            let color = map[age.robot.unit];
+            
+            blocks.push(<div key={i} style={Object.assign(blockStyle,{backgroundColor:color})} ></div>);
+            
+        });
+        
+        return <div title={age.human} style={wrapStyle}>
+            {blocks}
+        </div>;
+    }
+    
     getAccountAge(){
         if(!this.state.about) return <span>Loading</span>;
         const style = {
             lineHeight:this.state.iconSize+"px",
-            paddingLeft:(this.state.iconSize+10)+"px"
+            paddingLeft:(this.state.iconSize+10)+"px",
+            height: this.state.iconSize+"px",
+            display: "inline-block",
         };
-        return <span style={style}>Account Age: {this.calculateAge(this.state.about.created).human}</span>
+        return <span style={style}>Age: {this.getAgeHUD()}</span>
     }
     
     getAccountHate(){
@@ -217,7 +260,7 @@ class Main extends React.Component {
         
         const src = "data:image/svg+xml;base64,"+svg;
         
-        return <img style={{position: "absolute"}} src={src} />
+        return <img onClick={()=>{if(this.state.subs)console.log(this.state.subs);}} style={{position: "absolute"}} src={src} />
     }
     
     
