@@ -11,5 +11,5 @@
 
 // Inject Code from repo.
 const s = document.createElement("script");
-s.src = "//greymage.github.io/static/reddit/build/app.js";
+s.src = "//greymage.github.io/static/reddit/build/app.js?"+(+new Date());
 document.body.appendChild(s);

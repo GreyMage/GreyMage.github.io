@@ -291,20 +291,28 @@ if(window.gm_sanity_heartbeat) clearInterval(gm_sanity_heartbeat);
 window.gm_sanity_heartbeat = setInterval(()=>{
     let comments = document.querySelectorAll("[data-type=comment],[data-type=link]");
     comments = Array.prototype.slice.call(comments);
-    comments.forEach(comment => {
+    comments.forEach((comment,i) => {
         if(comment.gm_sanity) {
             if(!window.gm_sanity_forceRepaint) return;
             if(comment.gm_sanity.parentElement) comment.gm_sanity.parentElement.removeChild(comment.gm_sanity);
         }
-        // Create an element just below the user bar
-        comment.gm_sanity = document.createElement("div");
-        const tagline = comment.getElementsByClassName('tagline')[0];
-        if(tagline){
-            tagline.parentNode.insertBefore(comment.gm_sanity,tagline.nextSibling);
-            let author = comment.getAttribute("data-author");
-            ReactDOM.render(<Main author={author}/>, comment.gm_sanity);
-        }
         
+        comment.gm_sanity = true;
+        
+        // Defer actual attachment for each element by a quarter second to lessen load on weaker systems. 
+        setTimeout(()=>{
+            // Create an element just below the user bar
+            comment.gm_sanity = document.createElement("div");
+            const tagline = comment.getElementsByClassName('tagline')[0];
+            if(tagline){
+                tagline.parentNode.insertBefore(comment.gm_sanity,tagline.nextSibling);
+                let author = comment.getAttribute("data-author");
+                ReactDOM.render(<Main author={author}/>, comment.gm_sanity);
+            }
+            
+        },250*i);
+        
+                
     });
     window.gm_sanity_forceRepaint = false;
 },2000);
