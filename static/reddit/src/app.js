@@ -255,9 +255,11 @@ window.gm_sanity_heartbeat = setInterval(()=>{
         // Create an element just below the user bar
         comment.gm_sanity = document.createElement("div");
         const tagline = comment.getElementsByClassName('tagline')[0];
-        tagline.parentNode.insertBefore(comment.gm_sanity,tagline.nextSibling);
-        let author = comment.getAttribute("data-author");
-        ReactDOM.render(<Main author={author}/>, comment.gm_sanity);
+        if(tagline){
+            tagline.parentNode.insertBefore(comment.gm_sanity,tagline.nextSibling);
+            let author = comment.getAttribute("data-author");
+            ReactDOM.render(<Main author={author}/>, comment.gm_sanity);
+        }
         
     });
     window.gm_sanity_forceRepaint = false;
