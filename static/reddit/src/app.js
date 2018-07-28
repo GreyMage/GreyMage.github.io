@@ -8,6 +8,9 @@ import Nedb from 'nedb';
 import Identicon from 'identicon.js';
 import crypto from 'crypto';
 
+//for debugging 
+window.Nedb = Nedb;
+
 class Main extends React.Component {
 
     constructor(props) {
@@ -77,10 +80,9 @@ class Main extends React.Component {
     
         // First of all, since we're trying to not get API banned, lets cache this data for... i dunno, a day? right now we're only checking the last 50 posts, may extend later.
         const cacheTime = 1000 * 60 * 60 * 24;
-
-        // Didnt find him, load real data
-        const subs = {};
-
+        
+        let subs = {};
+        
         const getPage = (after=false)=>{
 
             let url = "/user/"+this.props.author+"/comments.json";
@@ -93,8 +95,13 @@ class Main extends React.Component {
                     const posts = json.data.children;
                     if(posts.length > 0){
                         posts.forEach(post => {
-                            subs[post.data.subreddit] = subs[post.data.subreddit] || 0;
-                            subs[post.data.subreddit]++;
+                            try {
+                                subs[post.data.subreddit] = subs[post.data.subreddit] || {};
+                                subs[post.data.subreddit][post.data.id] = post.data.body;
+                            }catch(e){
+                                subs[post.data.subreddit] = {};
+                                subs[post.data.subreddit][post.data.id] = post.data.body;
+                            }
                         })
                     }
                     if(more > 0 && json.data.after) {
@@ -129,7 +136,12 @@ class Main extends React.Component {
             
         }
 
-        getPage();
+        // Load any existing subs
+        this.db.subs.findOne({name:this.props.author}, (err, data)=>{
+            if(!err && data && data.subs) subs = data.subs;
+            getPage();
+        });
+        
     }
     
     loadSubs(){
