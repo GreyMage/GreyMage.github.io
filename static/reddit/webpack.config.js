@@ -2,6 +2,33 @@ require('dotenv').config();
 const path = require('path');
 const webpack = require('webpack');
 
+const plugins = [
+	new webpack.DefinePlugin({
+		'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+	})
+]
+	
+if(process.env.NODE_ENV === 'production'){
+	plugins.push(new webpack.optimize.UglifyJsPlugin({
+		compress: {
+			warnings: false,
+			screw_ie8: true,
+			conditionals: true,
+			unused: true,
+			comparisons: true,
+			sequences: true,
+			dead_code: true,
+			evaluate: true,
+			if_return: true,
+			join_vars: true
+		},
+		output: {
+			comments: false
+		}
+	}))
+	plugins.push(new webpack.HashedModuleIdsPlugin())
+}
+	
 module.exports = {
     entry: "./src/app.js", // string | object | array
   
@@ -36,27 +63,5 @@ module.exports = {
             },
         ]
     },
-    plugins: [
-        // new webpack.optimize.UglifyJsPlugin({
-            // compress: {
-                // warnings: false,
-                // screw_ie8: true,
-                // conditionals: true,
-                // unused: true,
-                // comparisons: true,
-                // sequences: true,
-                // dead_code: true,
-                // evaluate: true,
-                // if_return: true,
-                // join_vars: true
-            // },
-            // output: {
-                // comments: false
-            // }
-        // }),
-        // new webpack.HashedModuleIdsPlugin(),
-        new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-        })
-    ]
+    plugins: plugins
 }

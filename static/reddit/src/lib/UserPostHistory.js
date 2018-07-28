@@ -81,7 +81,7 @@ export default class UserPostHistory {
 				}
 
 				this.db.subs.update({name:data.name},data,{upsert:true},(err,numReplaced)=>{
-					resolve({subs:data.subs});
+					resolve(data.subs);
 					if(cb)cb();
 				})
 				
@@ -104,7 +104,7 @@ export default class UserPostHistory {
 				// This needs to also check expiration
 				// console.log(data);
 				if(data) {
-					resolve({subs:data.subs});
+					resolve(data.subs);
 					return;
 				}
 				

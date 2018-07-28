@@ -54,7 +54,7 @@ class Main extends React.Component {
     }
     
     getAccountHate(){
-        if(!this.state.subs) return <span></span>;
+        if(!this.state.subs) return <span>Hate?</span>;
         
         let hate = [
             'The_Donald',
@@ -68,8 +68,11 @@ class Main extends React.Component {
                 user_hates.push(ha);
             }
         })
+		
+		console.log("this.state.subs",this.state.subs);
+		console.log("user_hates",user_hates);
         
-        if(user_hates.length==0) return <span></span>;
+        if(user_hates.length==0) return <span>no Hate</span>;
         
         return <span style={{color:'red'}}>User has posted on: {user_hates.join(", ")}</span>
     }
