@@ -214,7 +214,7 @@ class Main extends React.Component {
         }
         
         const blocks = [];
-        Array.from(Array(age.robot.num || 1),(_,i)=>{
+        Array.from(Array(Math.max(1,age.robot.num)),(_,i)=>{
             
             const map = {
                 "Year": "#558b2f",

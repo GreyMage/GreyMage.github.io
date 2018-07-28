@@ -18583,7 +18583,7 @@ var Main = function (_React$Component) {
             };
 
             var blocks = [];
-            Array.from(Array(age.robot.num || 1), function (_, i) {
+            Array.from(Array(Math.max(1, age.robot.num)), function (_, i) {
 
                 var map = {
                     "Year": "#558b2f",
