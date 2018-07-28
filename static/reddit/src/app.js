@@ -97,11 +97,15 @@ class Main extends React.Component {
                         posts.forEach(post => {
                             try {
                                 subs[post.data.subreddit] = subs[post.data.subreddit] || {};
-                                subs[post.data.subreddit][post.data.id] = post.data.body;
                             }catch(e){
                                 subs[post.data.subreddit] = {};
-                                subs[post.data.subreddit][post.data.id] = post.data.body;
                             }
+                            
+                            subs[post.data.subreddit][post.data.id] = {
+                                name:post.data.name,
+                                permalink:post.data.permalink,
+                                body:post.data.body
+                            };
                         })
                     }
                     if(more > 0 && json.data.after) {
