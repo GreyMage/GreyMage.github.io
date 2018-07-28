@@ -25,14 +25,14 @@ module.exports = {
                 }
             },
             {
-                test: /\.ttf$/,
-                use: {
-                    loader: 'file-loader',
-                    options: {
-                        name: '[name].[ext]',
-                        outputPath: path.resolve(__dirname, "public", "fonts")
-                    }
-                }
+                test: /\.less$/,
+                use: [{
+					loader: 'style-loader' // creates style nodes from JS strings
+				}, {
+					loader: 'css-loader' // translates CSS into CommonJS
+				}, {
+					loader: 'less-loader' // compiles Less to CSS
+				}]
             },
         ]
     },
@@ -55,8 +55,8 @@ module.exports = {
             // }
         // }),
         // new webpack.HashedModuleIdsPlugin(),
-        // new webpack.DefinePlugin({
-            // 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-        // })
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+        })
     ]
 }

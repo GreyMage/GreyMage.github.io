@@ -1,247 +1,56 @@
+'use strict';
 // THIS IS THE CLIENT APPLICATION
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Queue from "./lib/Queue";
-import GetJson from "./lib/GetJson";
-import Nedb from 'nedb';
-import Identicon from 'identicon.js';
-import crypto from 'crypto';
 
-//for debugging 
-window.Nedb = Nedb;
+import UserIdenticon from "./lib/ui/UserIdenticon";
+import UserAge from "./lib/ui/UserAge";
+
+import UserPostHistory from "./lib/UserPostHistory";
+import UserAbout from "./lib/UserAbout";
+
+import Styles from "./app.less";
 
 class Main extends React.Component {
 
     constructor(props) {
+		
+		// console.log(Styles);
+		
         super(props);
-        this.queue = new Queue();
-        this.state = { iconSize: 20 }
+		this.state = {};
+		
+		this.postHistory = new UserPostHistory(this.props.author);
+		this.about = new UserAbout(this.props.author).about;
         
         this.loadAbout = this.loadAbout.bind(this);
-        this.loadSubs = this.loadSubs.bind(this);
-        this.fetchSubs = this.fetchSubs.bind(this);
+        this.togglePane = this.togglePane.bind(this);
     }
     
     componentDidMount(){
-    
-        // Lets load in our data!
-        this.db = {};
-        this.db.about = new Nedb({
-            filename: 'about',
-            autoload: true
-        });
-        this.db.subs = new Nedb({
-            filename: 'subs',
-            autoload: true
-        });
-        
+
         this.loadAbout();
         this.loadSubs();
-        
+		
     }
     
     loadAbout(){
-        
-        this.db.about.findOne({name:this.props.author}, (err, about)=>{
-        
-            if(about) {
-                this.setState({about});
-                return;
-            }
-            
-            this.queue.add(done => {
-                const path = "/user/"+this.props.author+"/about.json";
-                // console.log("trying to get json",path);
-                const fetch = GetJson(path);
-                
-                fetch.then(({data}) => {
-                    this.db.about.update({name:data.name},data,{upsert:true},(err,numReplaced)=>{
-                        this.setState({about:data});
-                        done();
-                    })
-                    // console.log(data);
-                })
-                
-                fetch.catch((e)=>{
-                    // Try again. (this will re-queue)
-                    done();
-                    console.log("Failed to fetch",path,"Trying again to get about");
-                    this.loadAbout();
-                });
-                
-            })
-            
-        });
-    
+		this.about.then(about => {
+			this.setState({about});
+		})
     }
-    
-    fetchSubs(more=0){
-    
-        // First of all, since we're trying to not get API banned, lets cache this data for... i dunno, a day? right now we're only checking the last 50 posts, may extend later.
-        const cacheTime = 1000 * 60 * 60 * 24;
-        
-        let subs = {};
-        
-        const getPage = (after=false)=>{
-
-            let url = "/user/"+this.props.author+"/comments.json";
-            if(after) url += "?after="+after;
-
-            this.queue.add(done => {
-                const fetch = GetJson(url)
-                
-                fetch.then(json => {
-                    const posts = json.data.children;
-                    if(posts.length > 0){
-                        posts.forEach(post => {
-                            try {
-                                subs[post.data.subreddit] = subs[post.data.subreddit] || {};
-                            }catch(e){
-                                subs[post.data.subreddit] = {};
-                            }
-                            
-                            subs[post.data.subreddit][post.data.id] = {
-                                name:post.data.name,
-                                permalink:post.data.permalink,
-                                body:post.data.body
-                            };
-                        })
-                    }
-                    if(more > 0 && json.data.after) {
-                        more--;
-                        getPage(json.data.after);
-                    }
-                    else finish(done);
-                })
-                
-                fetch.catch((e)=>{
-                    // Try again. (this will re-queue)
-                    done();
-                    console.log("Failed to fetch",url,"Trying again, no json",after);
-                    getPage(after);
-                });
-            })
-            
-        }
-
-        const finish = (cb) =>{
-
-            const data = {
-                name:this.props.author,
-                expires: (new Date().getTime()) + cacheTime,
-                subs:subs
-            }
-
-            this.db.subs.update({name:data.name},data,{upsert:true},(err,numReplaced)=>{
-                this.setState({subs:data.subs});
-                if(cb)cb();
-            })
-            
-        }
-
-        // Load any existing subs
-        this.db.subs.findOne({name:this.props.author}, (err, data)=>{
-            if(!err && data && data.subs) subs = data.subs;
-            getPage();
-        });
-        
-    }
+   
     
     loadSubs(){
-    
-        this.db.subs.findOne({name:this.props.author}, (err, data)=>{
-        
-            if(data) {
-                this.setState({subs:data.subs});
-                return;
-            }
-            
-            this.fetchSubs();
-        
-        });
-    
-        
-    }
-    
-    // Get detailed age info
-    calculateAge(birthday){
-
-        const birthDate = new Date(parseInt(birthday,10) * 1000);
-        const age = {ms:(new Date().getTime()) - birthDate.getTime()}
-        age.seconds = age.ms / 1000;
-        age.minutes = age.seconds / 60;
-        age.hours = age.minutes / 60;
-        age.days = age.hours / 24;
-        age.weeks = age.days / 7;
-        age.months = age.days / 30;
-        age.years = age.days / 365;
-
-        // Work out human description
-        if(age.years > 1){
-            age.human = `around ${Math.floor(age.years)} years.`;
-            age.robot = {unit:"Year",num: Math.floor(age.years)}
-        } else if(age.months > 1) {
-            age.human = `around ${Math.floor(age.months)} months.`;
-            age.robot = {unit:"Month",num: Math.floor(age.months)}
-        } else if(age.days > 1) {
-            age.human = `only ${Math.floor(age.days)} days.`;
-            age.robot = {unit:"Day",num: Math.floor(age.days)}
-        } else {
-            age.human = `TODAY! Only ${Math.floor(age.minutes)} Minutes!`;
-            age.robot = {unit:"Minute",num: Math.floor(age.minutes)}
-        }
-
-        return age;
-
+		this.postHistory.subs.then(subs => {
+			this.setState({subs});
+		})
     }
     
     getAgeHUD(){
-        const age = this.calculateAge(this.state.about.created);
-        // console.log(age);
-        
-        const wrapStyle = {
-            display:'inline-flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            height: '20px',
-        }
-        const blockStyle = {
-            height: "10px",
-            width: "10px",
-            margin: "1px",
-            display: 'inline-block',
-        }
-        
-        const blocks = [];
-        Array.from(Array(Math.max(1,age.robot.num)),(_,i)=>{
-            
-            const map = {
-                "Year": "#558b2f",
-                "Month": "#ff8f00",
-                "Day": "#c62828",
-                "Minute": "#4e342e",
-            }
-            let color = map[age.robot.unit];
-            
-            blocks.push(<div key={i} style={Object.assign(blockStyle,{backgroundColor:color})} ></div>);
-            
-        });
-        
-        return <div title={age.human} style={wrapStyle}>
-            {blocks}
-        </div>;
-    }
-    
-    getAccountAge(){
-        if(!this.state.about) return <span>Loading</span>;
-        const style = {
-            lineHeight:this.state.iconSize+"px",
-            paddingLeft:(this.state.iconSize+10)+"px",
-            height: this.state.iconSize+"px",
-            display: "inline-block",
-        };
-        return <span style={style}>Age: {this.getAgeHUD()}</span>
+		if(!this.state.about)return <span></span>;
+		return <UserAge about={this.state.about} />;
     }
     
     getAccountHate(){
@@ -262,40 +71,32 @@ class Main extends React.Component {
         
         if(user_hates.length==0) return <span></span>;
         
-        return <span style={{color:'red'}}>User has recently posted on: {user_hates.join(", ")}</span>
+        return <span style={{color:'red'}}>User has posted on: {user_hates.join(", ")}</span>
     }
+	
+	togglePane(){
+		console.log("togglePane",this.props.author);
+		console.log("this.state.subs",this.state.subs);
+	}
     
     getIdenticon(){
         if(!this.state.about) return <span></span>;
-        
-        let hash = crypto.createHash('sha1').update(this.props.author).digest('hex');
-        var svg = new Identicon(hash, {
-            margin: 0,
-            size: this.state.iconSize,
-            format: 'svg'
-        }).toString();
-        
-        const src = "data:image/svg+xml;base64,"+svg;
-        
-        return <img onClick={()=>{if(this.state.subs)console.log(this.state.subs);}} style={{position: "absolute"}} src={src} />
+        return <UserIdenticon name={this.props.author} onClick={this.togglePane} />;
     }
     
-    
-    getLoadingContent(){
-        return <div>
-            Loading...
-        </div>
-    }
-    
-    getContent(){
-        return <div>
-            <div style={{position:'relative',display: "inline-block"}}>{this.getIdenticon()} {this.getAccountAge()}</div>
-            <div>{this.getAccountHate()}</div>
-        </div>
-    }
+	getSanityBar(){
+		// Ripe for classin'
+		return <div className={`sanity-bar`}>
+			{this.getIdenticon()} 
+			{this.getAgeHUD()}
+		</div>
+	}
     
     render(){
-        return this.getContent();
+        return <div>
+            <div>{this.getSanityBar()}</div>
+            <div>{this.getAccountHate()}</div>
+        </div>
     }
 
 }
@@ -327,9 +128,8 @@ window.gm_sanity_heartbeat = setInterval(()=>{
             }
             
         },250*i);
-        
-                
-    });
+
+	});
     window.gm_sanity_forceRepaint = false;
 },2000);
 
