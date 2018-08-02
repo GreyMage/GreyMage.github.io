@@ -89,7 +89,8 @@ export default class UserPostHistory {
 
 			// Load any existing subs
 			this.db.subs.findOne({name:this.author}, (err, data)=>{
-				if(!err && data && data.subs) subs = data.subs;
+				// Leaving this line in allows growing a larger "set" of data, but eventually slows the browser down to a fucking crawl.
+				// if(!err && data && data.subs) subs = data.subs;
 				getPage();
 			});
 		})

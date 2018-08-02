@@ -7,9 +7,11 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack --progress",
+    "production": "cross-env NODE_ENV=production webpack --progress",
+    "development": "cross-env NODE_ENV=development webpack --progress",
     "watch": "cross-env NODE_ENV=development webpack --progress --watch",
-    "dev": "npm run watch",
+    "build": "npm run production",
+    "dev": "npm run development",
     "postinstall": "npm run build"
   },
   "dependencies": {
