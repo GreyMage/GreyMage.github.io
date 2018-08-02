@@ -49,12 +49,13 @@ class Main extends React.Component {
     }
     
     getAgeHUD(){
-		if(!this.state.about)return <span></span>;
+		if(!this.state.about)return <span>no about</span>;
 		return <UserAge about={this.state.about} />;
     }
     
     getAccountHate(){
-        if(!this.state.subs) return <span></span>;
+        if(!this.state.subs)
+			return <span>no hate</span>;
         
         let hate = [
             'The_Donald',

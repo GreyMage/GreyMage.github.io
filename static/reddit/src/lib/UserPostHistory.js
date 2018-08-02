@@ -35,6 +35,7 @@ export default class UserPostHistory {
 				let url = "/user/"+this.author+"/comments.json";
 				if(after) url += "?after="+after;
 
+				// console.log("queueing",url);
 				this.queue.add(done => {
 					const fetch = GetJson(url)
 					
@@ -88,11 +89,11 @@ export default class UserPostHistory {
 			}
 
 			// Load any existing subs
-			this.db.subs.findOne({name:this.author}, (err, data)=>{
+			// this.db.subs.findOne({name:this.author}, (err, data)=>{
 				// Leaving this line in allows growing a larger "set" of data, but eventually slows the browser down to a fucking crawl.
 				// if(!err && data && data.subs) subs = data.subs;
 				getPage();
-			});
+			// });
 		})
     }
 	

@@ -77,7 +77,7 @@ export default class UserAge extends React.Component {
         });
         
         return <div title={age.human} style={wrapStyle}>
-            {blocks}
+            {blocks} 
         </div>;
         
     }

@@ -29,29 +29,30 @@ export default class UserAbout {
 				if(about) {
 					resolve(about);
 					return;
-				}
-				
-				this.queue.add(done => {
-					const path = "/user/"+this.author+"/about.json";
-					// console.log("trying to get json",path);
-					const fetch = GetJson(path);
+				} else {
 					
-					fetch.then(({data}) => {
-						this.db.about.update({name:data.name},data,{upsert:true},(err,numReplaced)=>{
-							resolve(data);
-							done();
+					this.queue.add(done => {
+						const path = "/user/"+this.author+"/about.json";
+						// console.log("trying to get json",path);
+						const fetch = GetJson(path);
+						
+						fetch.then(({data}) => {
+							this.db.about.update({name:data.name},data,{upsert:true},(err,numReplaced)=>{
+								resolve(data);
+								done();
+							})
+							// console.log(data);
 						})
-						// console.log(data);
+						
+						fetch.catch((e)=>{
+							// Try again. (this will re-queue)
+							done();
+							console.log("Failed to fetch",path,"Trying again to get about");
+							resolve(this.about);
+						});
+						
 					})
-					
-					fetch.catch((e)=>{
-						// Try again. (this will re-queue)
-						done();
-						console.log("Failed to fetch",path,"Trying again to get about");
-						resolve(this.about);
-					});
-					
-				})
+				}
 				
 			});
 			
