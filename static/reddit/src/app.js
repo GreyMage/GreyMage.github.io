@@ -6,11 +6,12 @@ import ReactDOM from 'react-dom';
 
 import UserIdenticon from "./lib/ui/UserIdenticon";
 import UserAge from "./lib/ui/UserAge";
+import UserPostPreview from "./lib/ui/UserPostPreview";
 
 import UserPostHistory from "./lib/UserPostHistory";
 import UserAbout from "./lib/UserAbout";
 
-import Styles from "./app.less";
+import "./app.less";
 
 class Main extends React.Component {
 
@@ -77,8 +78,9 @@ class Main extends React.Component {
     }
 	
 	togglePane(){
-		console.log("togglePane",this.props.author);
-		console.log("this.state.subs",this.state.subs);
+		this.setState(oldState => {
+			return {showPostHistory:!oldState.showPostHistory};
+		});
 	}
     
     getIdenticon(){
@@ -94,10 +96,18 @@ class Main extends React.Component {
 		</div>
 	}
     
+	getPostHistoryWidget(){
+		if(!this.state.subs || !this.state.showPostHistory)
+			return <span></span>;
+		console.log(this.state.subs);
+		return <UserPostPreview history={this.state.subs}/>
+	}
+    
     render(){
-        return <div>
+        return <div className={`sanity`}>
             <div>{this.getSanityBar()}</div>
             <div>{this.getAccountHate()}</div>
+            <div>{this.getPostHistoryWidget()}</div>
         </div>
     }
 

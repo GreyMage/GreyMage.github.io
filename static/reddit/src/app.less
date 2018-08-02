@@ -1,10 +1,39 @@
-.sanity-bar{
-	display: flex;
-	height: 20px;
-	justify-items: center;
-	align-content: center;
+.sanity {
+
+    position: relative;
 	
-	.identicon{
-		margin-right:10px;
+	.sanity-bar{
+		display: flex;
+		height: 20px;
+		justify-items: center;
+		align-content: center;
+		
+		.identicon{
+			margin-right:10px;
+		}
 	}
+	
+	.post-preview{
+	
+		.title{
+			font-weight: bold;
+			margin: 0 3px;
+			padding: 3px 0;
+			cursor: pointer;
+			color: black;
+			font-size: 12px;
+		}
+	
+		a {
+			white-space: nowrap;
+		}
+		
+		li {
+			text-indent: 5px;
+			border-left: 1px solid black;
+			margin: 2px;
+			border-bottom: 1px solid black;
+		}
+	}
+	
 }
