@@ -62,7 +62,10 @@ class Main extends React.Component {
             'The_Donald',
             'CringeAnarchy',
             'GamersRiseUp',
-            'greatawakening',
+            'NOIZ',
+            'CryptAssist',
+            'cryptocurrencynewico',
+            'u_cybercapitalinvest',
         ];
         let user_hates = [];
         hate.forEach(ha => {
